@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Borrow History</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #101014, #23263a);
+      min-height: 100vh;
+      padding: 2rem;
+      color: #f0f0f0;
+    }
+
+    .glass {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(14px);
+      border-radius: 1.25rem;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    th, td {
+      padding: 1rem;
+      text-align: left;
+    }
+
+    thead {
+      background-color: rgba(255, 255, 255, 0.05);
+      border-bottom: 2px solid rgba(255, 255, 255, 0.08);
+    }
+
+    tr:hover {
+      background-color: rgba(255, 255, 255, 0.03);
+    }
+  </style>
+</head>
+<body>
+  <div class="max-w-6xl mx-auto glass p-8 mt-10">
+    <h1 class="text-3xl font-bold text-center mb-6 text-white">📖 Your Borrow History</h1>
+    <div class="overflow-x-auto">
+      <table class="text-sm">
+        <thead class="text-gray-300 uppercase text-xs tracking-wide">
+          <tr>
+            <th>Book</th>
+            <th>Borrowed</th>
+            <th>Due Date</th>
+            <th>Returned</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in records %}
+          <tr class="border-b border-gray-600 text-gray-200">
+            <td>{{ r.book.title }}</td>
+            <td>{{ r.borrow_date }}</td>
+            <td>{{ r.due_date }}</td>
+            <td>
+              {% if r.return_date %}
+                {{ r.return_date }}
+              {% else %}
+                <span class="text-red-400 italic">Not returned</span>
+              {% endif %}
+            </td>
+            <td>
+              {% if r.return_date %}
+                <span class="text-green-400 font-medium">✅ Returned</span>
+              {% elif r.is_overdue %}
+                <span class="text-red-500 font-medium">❌ Overdue</span>
+              {% else %}
+                <span class="text-yellow-400 font-medium">⏳ Not Yet Returned</span>
+              {% endif %}
+            </td>
+            <td>
+              {% if not r.return_date %}
+              <a href="{% url 'return_book' r.id %}" onclick="return confirm('Confirm return?')" class="text-blue-400 hover:text-blue-200 transition font-semibold">🔙 Return</a>
+              {% else %}
+              <span class="text-gray-500">—</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="6" class="text-center text-gray-400 py-4">No borrowing history found.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="text-center mt-6">
+      <a href="{% url 'user_dashboard' %}" class="inline-block px-6 py-3 text-white rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-indigo-700 hover:to-purple-700 transition font-semibold">← Back to Dashboard</a>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-white py-8 mt-10">
+    <div class="max-w-5xl mx-auto px-4">
+        <div class="text-center">
+            <p class="text-sm text-gray-400">Designed with <span class="text-pink-400 animate-pulse inline-block">&#10084;</span> for library lovers</p>
+        </div>
+    </div>
+  </footer>
+</body>
+</html>

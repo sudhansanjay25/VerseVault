@@ -1,0 +1,93 @@
+{% load widget_tweaks %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Submit Review</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(120deg, #101014 0%, #23263a 100%);
+      min-height: 100vh;
+      position: relative;
+    }
+    .animated-bg-gradient {
+      width: 100vw;
+      height: 100vh;
+      background: linear-gradient(120deg, #101014 0%, #23263a 100%);
+      opacity: 0.12;
+      filter: blur(80px);
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .glass-effect {
+      background: rgba(20, 22, 32, 0.96);
+      backdrop-filter: blur(18px);
+      border: 1.5px solid rgba(60,72,100,0.18);
+      box-shadow: 0 8px 32px 0 rgba(35,38,58,0.10);
+      border-radius: 1.5rem;
+    }
+    .cool-btn {
+      background: linear-gradient(90deg, #23263a 0%, #3a4256 100%);
+      color: #f5f5f5;
+      box-shadow: 0 4px 24px 0 rgba(35,38,58,0.12), 0 0 8px 2px #23263a;
+      border-radius: 1.25rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      transition: background 0.2s, color 0.2s;
+    }
+    .cool-btn:hover {
+      background: linear-gradient(90deg, #3a4256 0%, #101014 100%);
+      color: #ffd700;
+    }
+  </style>
+</head>
+<body>
+<div class="animated-bg-gradient"></div>
+
+<div class="relative z-10 flex flex-col min-h-screen justify-center items-center px-2 py-6">
+  <div class="w-full max-w-2xl glass-effect p-8 mb-8 mt-8">
+    <h1 class="text-3xl font-bold text-white mb-6 text-center flex items-center justify-center gap-2">
+      ✍️ Submit Review for <span class="text-yellow-400">{{ book.title }}</span>
+    </h1>
+
+    <form method="post" class="space-y-6">
+      {% csrf_token %}
+
+      <div>
+        <label class="block mb-2 text-sm font-medium text-cyan-200">Your Review</label>
+        {{ form.review|add_class:"w-full bg-white/10 border border-cyan-500/30 text-white placeholder:text-cyan-300 px-4 py-3 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-400" }}
+      </div>
+
+      <button type="submit"
+        class="w-full py-3 text-lg font-semibold rounded-xl bg-gradient-to-r from-cyan-400 to-indigo-500 hover:from-cyan-500 hover:to-indigo-600 transition-all duration-300 text-white shadow-md hover:shadow-lg">
+        🚀 Submit Review
+      </button>
+
+      <!-- Back to Dashboard Button -->
+      <div class="mt-8 flex justify-center">
+        <a href="{% url 'user_dashboard' %}"
+           class="cool-btn px-8 py-3 text-base font-semibold rounded-xl bg-gradient-to-r from-indigo-500 to-cyan-400 hover:from-indigo-600 hover:to-cyan-500 transition-all duration-300 text-white shadow-md hover:shadow-lg flex items-center gap-2">
+          ← Back to Dashboard
+        </a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-gray-800 text-white py-8 mt-10">
+  <div class="max-w-5xl mx-auto px-4">
+    <div class="text-center">
+      <p class="text-sm text-gray-400">Designed with <span class="text-pink-400 animate-pulse inline-block">&#10084;</span> for library lovers</p>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

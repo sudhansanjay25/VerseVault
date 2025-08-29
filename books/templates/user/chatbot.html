@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Library Chatbot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white flex flex-col items-center justify-center min-h-screen px-4">
+    <div class="bg-gray-800 p-6 rounded-xl w-full max-w-2xl shadow-2xl">
+        <h1 class="text-2xl font-bold mb-4">📚 Ask the Library Assistant</h1>
+        <div id="chat-box" class="h-80 overflow-y-auto bg-gray-700 p-4 rounded-lg mb-4 text-sm space-y-2">
+            <!-- Chat will appear here -->
+        </div>
+        <form id="chat-form" class="flex gap-2">
+            <input type="text" id="user-input" class="flex-1 px-4 py-2 rounded bg-gray-900 text-white focus:outline-none" placeholder="Ask something...">
+            <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 rounded">Send</button>
+        </form>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 mt-10">
+        <div class="max-w-5xl mx-auto px-4">
+            <div class="text-center">
+                <p class="text-sm text-gray-400">Designed with <span class="text-pink-400 animate-pulse inline-block">&#10084;</span> for library lovers</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const form = document.getElementById('chat-form');
+        const input = document.getElementById('user-input');
+        const box = document.getElementById('chat-box');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const message = input.value.trim();
+            if (!message) return;
+
+            box.innerHTML += `<div><strong>You:</strong> ${message}</div>`;
+            input.value = '';
+            box.scrollTop = box.scrollHeight;
+
+            const response = await fetch('/chatbot/ask/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({ message: message })
+            });
+
+            const data = await response.json();
+            box.innerHTML += `<div><strong>Bot:</strong> ${data.reply}</div>`;
+            box.scrollTop = box.scrollHeight;
+        });
+    </script>
+</body>
+</html>

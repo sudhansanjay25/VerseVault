@@ -1,0 +1,173 @@
+{% block content %}
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+  body { font-family: 'Inter', sans-serif; }
+  .glass-effect {
+    background: rgba(30, 41, 59, 0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(59, 130, 246, 0.18);
+  }
+  .gradient-bg {
+    background: linear-gradient(135deg, #0f2027 0%, #2c5364 100%);
+  }
+  .cool-btn {
+    background: linear-gradient(90deg, #38bdf8 0%, #818cf8 100%);
+    color: #fff;
+    box-shadow: 0 4px 24px 0 rgba(56,189,248,0.15);
+    transition: all 0.3s cubic-bezier(.4,0,.2,1);
+  }
+  .cool-btn:hover {
+    background: linear-gradient(90deg, #0ea5e9 0%, #6366f1 100%);
+    transform: scale(1.04);
+    box-shadow: 0 8px 32px 0 rgba(56,189,248,0.25);
+  }
+  .dark-table {
+    background: rgba(30,41,59,0.85);
+    color: #e0e7ef;
+    border-radius: 1rem;
+    overflow: hidden;
+  }
+  .dark-table th {
+    background: linear-gradient(90deg, #1e293b 60%, #334155 100%);
+    color: #38bdf8;
+    font-weight: 600;
+    padding: 12px 8px;
+  }
+  .dark-table td {
+    background: rgba(30,41,59,0.7);
+    color: #e0e7ef;
+    padding: 10px 8px;
+  }
+  .dark-table tr {
+    border-bottom: 1px solid #334155;
+    transition: background 0.2s;
+  }
+  .dark-table tr:hover {
+    background: rgba(56,189,248,0.08);
+  }
+</style>
+
+<div class="min-h-screen gradient-bg py-10 px-4">
+  <div class="max-w-5xl mx-auto glass-effect rounded-3xl shadow-2xl p-8">
+    <div class="flex justify-between items-center mb-8">
+      <h2 class="text-3xl font-bold text-white flex items-center gap-2 animate-fade-in">📚 Borrow History</h2>
+      <a href="{% url 'admin_dashboard' %}" class="cool-btn font-semibold px-8 py-3 rounded-xl shadow-lg text-lg">← Back to Dashboard</a>
+    </div>
+
+    <!-- Filter Form -->
+    <form method="get" class="mb-8 flex flex-wrap gap-4 items-center">
+      <label class="text-cyan-200 font-semibold">📅 Month:</label>
+      <select name="month" class="rounded-lg px-4 py-2 bg-slate-800 text-cyan-200 border border-slate-600 focus:outline-none focus:ring-2 focus:ring-cyan-400">
+        {% for m, mname in months %}
+        <option value="{{ m }}" {% if m == selected_month %}selected{% endif %}>{{ mname }}</option>
+        {% endfor %}
+      </select>
+      <label class="text-cyan-200 font-semibold">📆 Year:</label>
+      <select name="year" class="rounded-lg px-4 py-2 bg-slate-800 text-cyan-200 border border-slate-600 focus:outline-none focus:ring-2 focus:ring-cyan-400">
+        {% for y in years %}
+        <option value="{{ y }}" {% if y == selected_year %}selected{% endif %}>{{ y }}</option>
+        {% endfor %}
+      </select>
+      <button type="submit" class="cool-btn px-6 py-2 rounded-lg font-semibold">🔍 Filter</button>
+    </form>
+
+    <!-- Charts -->
+    <div class="flex flex-wrap gap-8 mb-10">
+      <div class="flex-1 min-w-[300px] glass-effect rounded-2xl p-6 shadow-xl">
+        <canvas id="popularBooksChart" height="250"></canvas>
+      </div>
+      <div class="flex-1 min-w-[300px] glass-effect rounded-2xl p-6 shadow-xl">
+        <canvas id="monthlyTrendChart" height="250"></canvas>
+      </div>
+    </div>
+
+    <!-- Borrow History Table -->
+    <h3 class="text-xl font-bold text-cyan-300 mb-4">Borrow History Table</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full dark-table mt-8">
+        <thead>
+          <tr>
+            <th>👤 Visitor</th>
+            <th>📖 Book</th>
+            <th>📥 Borrowed</th>
+            <th>📤 Returned</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for h in history %}
+          <tr>
+            <td>{{ h.visitor.name }}</td>
+            <td>{{ h.book.title }}</td>
+            <td>{{ h.borrow_date }}</td>
+            <td>{{ h.return_date|default:"❌ Not returned" }}</td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="4" class="text-center py-4 text-cyan-100">No records found for this period 🚫</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  // Popular Books Chart
+  new Chart(document.getElementById('popularBooksChart'), {
+    type: 'bar',
+    data: {
+      labels: [{% for b in popular_books %}'{{ b.title }}'{% if not forloop.last %}, {% endif %}{% endfor %}],
+      datasets: [{
+        label: 'Top Borrowed Books - {{ selected_month }}/{{ selected_year }}',
+        data: [{% for b in popular_books %}{{ b.count }}{% if not forloop.last %}, {% endif %}{% endfor %}],
+        backgroundColor: '#3498db',
+        borderRadius: 5
+      }]
+    },
+    options: {
+      plugins: {
+        title: {
+          display: true,
+          text: '📘 Most Borrowed Books',
+          font: { size: 16 }
+        },
+        legend: { display: false }
+      },
+      responsive: true,
+      maintainAspectRatio: false
+    }
+  });
+
+  // Monthly Borrow Trend Chart
+  new Chart(document.getElementById('monthlyTrendChart'), {
+    type: 'line',
+    data: {
+      labels: {{ trend_labels|safe }},
+      datasets: [{
+        label: 'Borrows in {{ selected_year }}',
+        data: {{ trend_data|safe }},
+        fill: true,
+        borderColor: '#2ecc71',
+        backgroundColor: 'rgba(46, 204, 113, 0.2)',
+        tension: 0.3
+      }]
+    },
+    options: {
+      plugins: {
+        title: {
+          display: true,
+          text: '📈 Borrow Trend Over Months',
+          font: { size: 16 }
+        }
+      },
+      responsive: true,
+      maintainAspectRatio: false
+    }
+  });
+</script>
+{% endblock %}

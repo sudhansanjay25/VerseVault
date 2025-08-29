@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All Books</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #101014, #23263a);
+            min-height: 100vh;
+            padding: 2rem;
+            color: #f0f0f0;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(14px);
+            border-radius: 1.25rem;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+        }
+
+        thead {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-bottom: 2px solid rgba(255, 255, 255, 0.08);
+        }
+
+        tr:hover {
+            background-color: rgba(255, 255, 255, 0.03);
+        }
+    </style>
+</head>
+<body>
+    <div class="max-w-5xl mx-auto glass p-8 mt-10">
+        <h1 class="text-3xl font-bold text-center mb-6 text-white">📚 All Available Books</h1>
+        <div class="overflow-x-auto">
+            <table class="text-sm">
+                <thead>
+                    <tr class="text-gray-300 uppercase text-xs tracking-wide">
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Publisher</th>
+                        <th>Year</th>
+                        <th>Copies</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for book in books %}
+                    <tr class="border-b border-gray-600 text-gray-200">
+                        <td>{{ book.title }}</td>
+                        <td>{{ book.author }}</td>
+                        <td>{{ book.publisher }}</td>
+                        <td>{{ book.publication_year }}</td>
+                        <td>{{ book.available_copies }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center text-gray-400 py-4">No books available.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="text-center mt-6">
+            <a href="{% url 'user_dashboard' %}" class="inline-block px-6 py-3 text-white rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-indigo-700 hover:to-purple-700 transition font-semibold">← Back to Dashboard</a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 mt-10">
+        <div class="max-w-5xl mx-auto px-4">
+            <div class="text-center">
+                <p class="text-sm text-gray-400">Designed with <span class="text-pink-400 animate-pulse inline-block">&#10084;</span> for library lovers</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,4 +1,4 @@
- h  0📚 Smart Library Management System 🚀
+📚 Smart Library Management System 🚀
 
 A full-stack AI-powered smart library system built with Django that automates library management with ML/NLP features like spam review detection, sentiment analysis, voice-based book search, personalized recommendations, and automatic email alerts. Designed for both administrators and students to offer a seamless digital library experience.
 

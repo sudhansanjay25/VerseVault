@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assign Book Location - Library Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body { font-family: 'Inter', sans-serif; }
+      .glass-effect {
+        background: rgba(30, 41, 59, 0.7);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(59, 130, 246, 0.18);
+      }
+      .gradient-bg {
+        background: linear-gradient(135deg, #0f2027 0%, #2c5364 100%);
+      }
+      .cool-btn {
+        background: linear-gradient(90deg, #38bdf8 0%, #818cf8 100%);
+        color: #fff;
+        box-shadow: 0 4px 24px 0 rgba(56,189,248,0.15);
+        transition: all 0.3s cubic-bezier(.4,0,.2,1);
+      }
+      .cool-btn:hover {
+        background: linear-gradient(90deg, #0ea5e9 0%, #6366f1 100%);
+        transform: scale(1.04);
+        box-shadow: 0 8px 32px 0 rgba(56,189,248,0.25);
+      }
+      .dark-table {
+        background: rgba(30,41,59,0.85);
+        color: #e0e7ef;
+        border-radius: 1rem;
+        overflow: hidden;
+      }
+      .dark-table th {
+        background: linear-gradient(90deg, #1e293b 60%, #334155 100%);
+        color: #38bdf8;
+        font-weight: 600;
+        padding: 12px 8px;
+      }
+      .dark-table td {
+        background: rgba(30,41,59,0.7);
+        color: #e0e7ef;
+        padding: 10px 8px;
+      }
+      .dark-table tr {
+        border-bottom: 1px solid #334155;
+        transition: background 0.2s;
+      }
+      .dark-table tr:hover {
+        background: rgba(56,189,248,0.08);
+      }
+    </style>
+            transition: all 0.3s ease;
+        }
+        .input-focus:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.1);
+        }
+        .button-hover {
+            transition: all 0.3s ease;
+        }
+        .button-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 via-white to-purple-50 min-h-screen relative overflow-hidden overflow-y-auto">
+    <!-- Navigation Header -->
+    <nav class="bg-white shadow-lg border-b border-gray-200 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-xl">📚</span>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-gray-800">Library Admin</h1>
+                        <p class="text-sm text-gray-500">Assign Book Location</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="{% url 'admin_dashboard' %}" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors duration-200 flex items-center space-x-2 button-hover">
+                        <span>←</span>
+                        <span>Back to Dashboard</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
+        <section class="mb-8 animate-fade-in">
+            <div class="text-center">
+                <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce-gentle">
+                    <span class="text-white text-2xl">📍</span>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">Assign Book Location</h2>
+                <p class="text-gray-600 text-lg">Set the exact location for a book in your library</p>
+            </div>
+        </section>
+
+        <section class="animate-fade-in" style="animation-delay: 0.2s;">
+            <div class="bg-white rounded-2xl shadow-xl p-8 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full opacity-50 -mr-10 -mt-10"></div>
+                <div class="absolute bottom-0 left-0 w-16 h-16 bg-gradient-to-br from-pink-100 to-blue-100 rounded-full opacity-50 -ml-8 -mb-8"></div>
+                <div class="relative z-10">
+                    <form method="POST" class="space-y-6">
+                        {% csrf_token %}
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Select Book</label>
+                                <select name="book" class="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 input-focus bg-white">
+                                    {% for book in books %}
+                                        <option value="{{ book.id }}">{{ book.title }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Block</label>
+                                <input type="text" name="block" required class="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 input-focus" placeholder="Block...">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Row</label>
+                                <input type="number" name="row" required class="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 input-focus" placeholder="Row...">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Column</label>
+                                <input type="number" name="column" required class="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 input-focus" placeholder="Column...">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Position</label>
+                                <input type="number" name="position" required class="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 input-focus" placeholder="Position...">
+                            </div>
+                        </div>
+                        <div class="flex justify-center pt-6">
+                            <button type="submit" class="w-40 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white text-lg font-semibold py-3 rounded-lg shadow-md button-hover transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50">
+                                Save
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <p class="text-sm text-gray-500 mt-2">Designed with <span class="text-pink-400 animate-pulse inline-block">&#10084;</span> for library lovers</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

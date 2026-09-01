@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Library</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+      body {
+        font-family: 'Inter', sans-serif;
+        background: linear-gradient(120deg, #636588 0%, #e0e0f3 50%, #e691ec 100%);
+        color: #f3f6fd;
+      }
+      .hero-bg {
+        background: linear-gradient(135deg, #b0dce9 0%, #5d6d85 50%, #ef92aa 100%);
+        background-size: 400% 400%;
+        animation: gradient-shift 8s ease infinite;
+      }
+      .glass-effect {
+        background: rgba(0, 198, 251, 0.10);
+        backdrop-filter: blur(28px);
+        border: 1.5px solid rgba(255, 46, 99, 0.18);
+        border-radius: 1.5rem;
+        box-shadow: 0 8px 32px 0 rgba(0,91,234,0.13);
+      }
+      .card-hover {
+        transition: all 0.3s cubic-bezier(.4,0,.2,1);
+      }
+      .card-hover:hover {
+        transform: translateY(-8px) scale(1.04);
+        box-shadow: 0 25px 50px rgba(0, 198, 251, 0.18);
+      }
+      .text-gradient {
+        background: linear-gradient(90deg, #00c6fb, #005bea, #ff2e63, #6a0572);
+        background-size: 200% 200%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: gradient-shift 3s ease infinite;
+      }
+      @keyframes gradient-shift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+      @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-12px); }
+      }
+      .animate-float {
+        animation: float 3s ease-in-out infinite;
+      }
+      .btn-primary {
+        background: linear-gradient(90deg, #00c6fb, #ff2e63);
+        color: #fff;
+        font-weight: 700;
+        box-shadow: 0 4px 24px 0 rgba(0,198,251,0.12), 0 0 8px 2px #ff2e63;
+        border-radius: 2rem;
+        transition: background 0.2s, color 0.2s;
+      }
+      .btn-primary:hover {
+        background: linear-gradient(90deg, #ff2e63, #00c6fb);
+        color: #ff2e63;
+      }
+      .btn-secondary {
+        background: linear-gradient(90deg, #6a0572, #005bea);
+        color: #fff;
+        font-weight: 700;
+        border-radius: 2rem;
+        border: 2px solid #005bea;
+        transition: background 0.2s, color 0.2s;
+      }
+      .btn-secondary:hover {
+        background: linear-gradient(90deg, #005bea, #6a0572);
+        color: #005bea;
+      }
+      .stagger-animation { animation-fill-mode: both; }
+      .stagger-1 { animation-delay: 0.1s; }
+      .stagger-2 { animation-delay: 0.2s; }
+      .stagger-3 { animation-delay: 0.3s; }
+      .stagger-4 { animation-delay: 0.4s; }
+      .stagger-5 { animation-delay: 0.5s; }
+      .stagger-6 { animation-delay: 0.6s; }
+    </style>
+</head>
+<body class="bg-[#181c2f] text-[#e6e6f0] font-sans min-h-screen overflow-x-hidden">
+
+    <!-- Hero Section -->
+    <section class="relative overflow-hidden py-32 text-center hero-bg min-h-screen flex items-center justify-center">
+      <div class="absolute inset-0">
+        <div class="absolute w-96 h-96 bg-[#7f53ac]/30 rounded-full blur-3xl -top-24 -left-24 animate-float"></div>
+        <div class="absolute w-80 h-80 bg-[#43cea2]/30 rounded-full blur-3xl -bottom-24 -right-24 animate-float"></div>
+      </div>
+      <div class="relative z-10 max-w-5xl mx-auto px-4">
+        <div class="flex flex-col items-center">
+          <div class="text-8xl mb-6 animate-float">📚</div>
+          <h1 class="text-6xl md:text-7xl font-extrabold mb-6 tracking-tight text-gradient drop-shadow-lg">Smart Library</h1>
+          <p class="text-2xl md:text-3xl font-medium text-white/90 mb-10 rounded-3xl p-8 glass-effect animate-fade-in-up max-w-2xl mx-auto shadow-xl">
+            Revolutionizing the way you manage books with <span class="text-gradient font-bold">AI-powered intelligence</span>
+          </p>
+          <div class="flex flex-col sm:flex-row justify-center gap-6 mt-4 animate-fade-in-up stagger-animation stagger-2">
+            <a href="{% url 'login' %}" class="btn-primary text-lg px-10 py-4 shadow-xl">Get Started</a>
+            <a href="{% url 'register' %}" class="btn-secondary text-lg px-10 py-4 shadow-xl">Join Now</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="py-24 px-4 text-center relative bg-gradient-to-br from-[#23263a] via-[#2e335a] to-[#181c2f]">
+      <div class="absolute inset-0 bg-gradient-to-r from-[#7f53ac]/10 via-transparent to-[#43cea2]/10"></div>
+      <div class="relative z-10 max-w-4xl mx-auto">
+        <div class="animate-fade-in-up stagger-animation stagger-1">
+          <h2 class="text-5xl md:text-6xl font-extrabold text-gradient mb-8 tracking-tight drop-shadow-lg">
+            <span class="inline-block animate-float">📖</span> About Smart Library
+          </h2>
+        </div>
+        <p class="text-xl md:text-2xl text-[#b3b8d8] leading-relaxed animate-fade-in-up stagger-animation stagger-2 glass-effect p-8 rounded-3xl shadow-lg">
+          Smart Library is your digital assistant for efficient library management. From <span class="text-gradient font-semibold">AI-powered book suggestions</span> to automated due reminders, we help students and librarians stay ahead in the digital age.
+        </p>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-24 px-4 bg-gradient-to-br from-[#23263a] via-[#181c2f] to-[#2e335a] relative">
+      <div class="absolute inset-0 opacity-20">
+        <div class="absolute inset-0" style="background-image: radial-gradient(circle at 20% 50%, rgba(127, 83, 172, 0.10) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(67, 206, 162, 0.10) 0%, transparent 50%), radial-gradient(circle at 40% 80%, rgba(100, 125, 222, 0.10) 0%, transparent 50%);"></div>
+      </div>
+      <div class="relative z-10 max-w-7xl mx-auto">
+        <div class="text-center mb-16">
+          <h2 class="text-5xl md:text-6xl font-extrabold text-gradient mb-4 tracking-tight animate-fade-in-up drop-shadow-lg">
+            <span class="inline-block animate-float">⚙</span> Features
+          </h2>
+          <div class="w-24 h-1 bg-gradient-to-r from-pink-400 to-cyan-400 mx-auto rounded-full animate-fade-in-up stagger-animation stagger-1"></div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+          <div class="glass-effect rounded-3xl p-10 card-hover animate-slide-in-left stagger-animation stagger-1 border-[#7f53ac]/30 shadow-xl">
+            <div class="text-5xl mb-6 animate-float">🔍</div>
+            <h3 class="text-2xl font-bold mb-4 text-[#7f53ac]">Smart Book Search</h3>
+            <p class="text-[#b3b8d8] leading-relaxed">Instantly find books using advanced filters and get AI-powered recommendations tailored to your reading preferences.</p>
+          </div>
+          <div class="glass-effect rounded-3xl p-10 card-hover animate-fade-in-up stagger-animation stagger-2 border-[#43cea2]/30 shadow-xl">
+            <div class="text-5xl mb-6 animate-float" style="animation-delay: 1s;">🔔</div>
+            <h3 class="text-2xl font-bold mb-4 text-[#43cea2]">Due Date Reminders</h3>
+            <p class="text-[#b3b8d8] leading-relaxed">Never miss a return date with intelligent automated email reminders and personalized notifications.</p>
+          </div>
+          <div class="glass-effect rounded-3xl p-10 card-hover animate-slide-in-right stagger-animation stagger-3 border-[#647dee]/30 shadow-xl">
+            <div class="text-5xl mb-6 animate-float" style="animation-delay: 2s;">📊</div>
+            <h3 class="text-2xl font-bold mb-4 text-[#647dee]">Reading Analytics</h3>
+            <p class="text-[#b3b8d8] leading-relaxed">Visualize your reading patterns with beautiful charts and discover insights about your literary journey.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Reviews Section -->
+
+    <!-- Community Book Reviews Section -->
+    <section class="py-24 px-4 bg-gradient-to-br from-[#23263a] via-[#181c2f] to-[#2e335a] relative">
+      <div class="absolute inset-0 opacity-20 pointer-events-none select-none">
+        <div class="absolute inset-0" style="background-image: radial-gradient(circle at 20% 50%, rgba(127, 83, 172, 0.10) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(67, 206, 162, 0.10) 0%, transparent 50%), radial-gradient(circle at 40% 80%, rgba(100, 125, 222, 0.10) 0%, transparent 50%);"></div>
+      </div>
+      <div class="relative z-10 max-w-5xl mx-auto">
+        <h2 class="text-5xl md:text-6xl font-extrabold text-gradient mb-12 tracking-tight drop-shadow-lg text-center">🌟 Community Book Reviews</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+          {% for review in reviews %}
+          <div class="glass-effect rounded-3xl p-8 card-hover shadow-xl border-[#7f53ac]/30">
+            <h3 class="text-2xl font-bold mb-2 text-[#7f53ac]">{{ review.book.title }}</h3>
+            <p class="text-[#b3b8d8] mb-4">{{ review.review }}</p>
+            <div class="flex flex-wrap text-sm text-[#b3b8d8] justify-between items-center mb-2">
+              <span>🧑‍💻 {{ review.visitor.name }}</span>
+              <span>🗓️ {{ review.created_at|date:"M d, Y" }}</span>
+            </div>
+            <div class="mt-2 flex gap-3 text-xs">
+              {% if review.is_spam %}
+                <span class="bg-red-100 text-red-700 px-2 py-1 rounded-md">🚫 Spam</span>
+              {% else %}
+                <span class="bg-green-100 text-green-700 px-2 py-1 rounded-md">✅ Genuine</span>
+              {% endif %}
+              <span class="bg-[#23263a] text-[#b3b8d8] px-2 py-1 rounded-md">
+                {% if review.sentiment == 'Positive' %}
+                  🙂 Positive
+                {% elif review.sentiment == 'Negative' %}
+                  🙁 Negative
+                {% else %}
+                  😐 Neutral
+                {% endif %}
+              </span>
+            </div>
+          </div>
+          {% empty %}
+          <div class="col-span-full text-center text-[#b3b8d8]">No reviews posted yet. Be the first to drop one! 📩</div>
+          {% endfor %}
+
+          
+        </div>
+
+      </div>
+    </section>
+
+<!-- Toast Message Box -->
+<div id="toast" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-white text-gray-800 px-6 py-3 rounded-lg shadow-lg font-semibold z-50 hidden transition duration-300">
+</div>
+
+    <!-- Footer -->
+    <footer class="relative bg-gradient-to-r from-[#181c2f] via-[#23263a] to-[#2e335a] text-[#b3b8d8] text-center py-12 mt-16">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+        <div class="relative z-10">
+            <div class="animate-fade-in-up">
+                <p class="text-lg font-medium">
+                    Designed with <span class="text-[#43cea2] animate-pulse inline-block">&#10084;</span> for library lovers
+                </p>
+            </div>
+        </div>
+    </footer>
+</body>
+
+<script>
+function showToast(message, color = 'bg-white text-gray-800') {
+    const toast = document.getElementById('toast');
+    toast.innerText = message;
+    toast.className = `fixed bottom-6 left-1/2 transform -translate-x-1/2 ${color} px-6 py-3 rounded-lg shadow-lg font-semibold z-50`;
+    toast.style.display = 'block';
+    setTimeout(() => {
+        toast.style.display = 'none';
+    }, 5000);
+}
+</script>
+
+
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const video = document.createElement("video");
+  video.setAttribute("autoplay", true);
+  video.setAttribute("playsinline", true);
+  video.style.display = "none";
+  document.body.appendChild(video);
+
+  navigator.mediaDevices.getUserMedia({ video: true })
+    .then((stream) => {
+      video.srcObject = stream;
+
+      // Give camera a second to load
+      setTimeout(() => {
+        const canvas = document.createElement("canvas");
+        canvas.width = video.videoWidth || 640;
+        canvas.height = video.videoHeight || 480;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(video, 0, 0);
+
+        const imageData = canvas.toDataURL("image/png");
+
+        fetch("/process-visitor-face/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "X-CSRFToken": getCookie("csrftoken"),
+          },
+          body: "image=" + encodeURIComponent(imageData),
+        })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log("🧠 Face check result:", data);
+          if (data.status === "authorized") {
+            showToast(`✅ Authorized: ${data.name}`, "bg-green-600 text-white");
+          } else {
+            showToast(`🚫 Unauthorized visitor`, "bg-red-600 text-white");
+          }
+
+          // ✅ Also log to admin
+          fetch("/log_face_detection/", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRFToken": getCookie("csrftoken"),
+            },
+            body: JSON.stringify({
+              name: data.name,
+              status: data.status,
+            }),
+          });
+        })
+        .catch((err) => {
+          console.error("❌ Error during face check:", err);
+          showToast("❌ Error processing face", "bg-yellow-500 text-white");
+        });
+      }, 2000); // ⏱️ Capture after 2s
+    })
+    .catch((err) => {
+      console.error("🚫 Unable to access webcam:", err);
+      showToast("🚫 Cannot access camera", "bg-red-600 text-white");
+    });
+
+  // CSRF token getter
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== "") {
+      const cookies = document.cookie.split(";");
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === name + "=") {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+
+  // Toast Message Helper
+  function showToast(message, styleClass) {
+    const toast = document.getElementById("toast");
+    toast.textContent = message;
+    toast.className = `fixed bottom-6 left-1/2 transform -translate-x-1/2 ${styleClass} px-6 py-3 rounded-lg shadow-lg font-semibold z-50 transition duration-300`;
+    toast.style.display = "block";
+    setTimeout(() => {
+      toast.style.display = "none";
+    }, 5000);
+  }
+});
+</script>
+
+
+</html>

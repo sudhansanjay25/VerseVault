@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Book - Library Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3b82f6',
+                        secondary: '#1e40af',
+                        accent: '#f59e0b',
+                        success: '#10b981',
+                        danger: '#ef4444',
+                        dark: '#1f2937',
+                        light: '#f8fafc'
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'slide-up': 'slideUp 0.3s ease-out',
+                        'bounce-gentle': 'bounceGentle 0.6s ease-in-out',
+                        'pulse-success': 'pulseSuccess 2s infinite'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideUp {
+            from { transform: translateY(10px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes bounceGentle {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        @keyframes pulseSuccess {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        .glassmorphism {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .form-gradient {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        .input-focus {
+            transition: all 0.3s ease;
+        }
+        .input-focus:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.1);
+        }
+        .button-hover {
+            transition: all 0.3s ease;
+        }
+        .button-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        .floating-elements {
+            position: absolute;
+            pointer-events: none;
+        }
+        .floating-book {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 via-white to-purple-50 min-h-screen relative overflow-hidden overflow-y-auto">
+    <!-- Floating Background Elements -->
+    <div class="floating-elements">
+        <div class="absolute top-10 left-10 w-20 h-20 bg-blue-200 rounded-full opacity-20 floating-book"></div>
+        <div class="absolute top-32 right-20 w-16 h-16 bg-purple-200 rounded-full opacity-20 floating-book" style="animation-delay: 1s;"></div>
+        <div class="absolute bottom-20 left-1/4 w-12 h-12 bg-pink-200 rounded-full opacity-20 floating-book" style="animation-delay: 2s;"></div>
+        <div class="absolute bottom-40 right-1/3 w-24 h-24 bg-indigo-200 rounded-full opacity-20 floating-book" style="animation-delay: 0.5s;"></div>
+    </div>
+
+    <!-- Navigation Header -->
+    <nav class="bg-white shadow-lg border-b border-gray-200 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-xl">📚</span>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-gray-800">Library Admin</h1>
+                        <p class="text-sm text-gray-500">Add New Book</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="{% url 'admin_dashboard' %}" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors duration-200 flex items-center space-x-2 button-hover">
+                        <span>←</span>
+                        <span>Back to Dashboard</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
+        <!-- Header Section -->
+        <section class="mb-8 animate-fade-in">
+            <div class="text-center">
+                <div class="w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce-gentle">
+                    <span class="text-white text-3xl">📘</span>
+                </div>
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">Add a New Book</h2>
+                <p class="text-gray-600 text-lg">Expand your library collection with new titles</p>
+            </div>
+        </section>
+
+        <!-- Success Messages -->
+        {% if messages %}
+            <section class="mb-8 animate-slide-up">
+                {% for message in messages %}
+                    <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded-lg shadow-md mb-4">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center mr-3 animate-pulse-success">
+                                <span class="text-white text-sm">✓</span>
+                            </div>
+                            <div>
+                                <p class="text-green-800 font-medium">Success!</p>
+                                <p class="text-green-700">{{ message }}</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </section>
+        {% endif %}
+
+        <!-- Form Section -->
+        <section class="animate-fade-in" style="animation-delay: 0.2s;">
+            <div class="bg-white rounded-2xl shadow-xl p-8 relative overflow-hidden">
+                <!-- Form Background Pattern -->
+                <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full opacity-50 -mr-16 -mt-16"></div>
+                <div class="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-br from-pink-100 to-blue-100 rounded-full opacity-50 -ml-12 -mb-12"></div>
+                
+                <div class="relative z-10">
+                    <div class="text-center mb-8">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">Book Information</h3>
+                        <p class="text-gray-600">Fill in the details below to add a new book to your library</p>
+                    </div>
+
+                    <form method="post" enctype="multipart/form-data" class="space-y-6">
+                        {% csrf_token %}
+                        
+                        <!-- Custom Form Styling -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Form fields will be styled here -->
+                            <div class="space-y-6 md:col-span-2">
+                                <!-- Django form will be processed and styled with JavaScript -->
+                                <div id="django-form-container">
+                                    {{ form.as_p }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="flex justify-center pt-6">
+                            <button type="submit" class="w-40 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white text-lg font-semibold py-3 rounded-lg shadow-md button-hover transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50">
+                                ADD
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Help Section -->
+        <section class="mt-12 animate-fade-in" style="animation-delay: 0.4s;">
+            <div class="bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl p-6 text-white">
+                <h3 class="text-xl font-bold mb-4 flex items-center">
+                    <span class="mr-2">💡</span>
+                    Quick Tips
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-white bg-opacity-20 rounded-lg p-4 backdrop-blur-sm">
+                        <h4 class="font-semibold mb-2">📖 Book Details</h4>
+                        <p class="text-sm text-blue-100">Enter accurate title, author, and ISBN information</p>
+                    </div>
+                    <div class="bg-white bg-opacity-20 rounded-lg p-4 backdrop-blur-sm">
+                        <h4 class="font-semibold mb-2">📸 Cover Image</h4>
+                        <p class="text-sm text-blue-100">Upload a clear cover image for better identification</p>
+                    </div>
+                    <div class="bg-white bg-opacity-20 rounded-lg p-4 backdrop-blur-sm">
+                        <h4 class="font-semibold mb-2">📝 Description</h4>
+                        <p class="text-sm text-blue-100">Add a brief description to help visitors</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <p class="text-sm text-gray-500 mt-2">Designed with <span class="text-pink-400 animate-pulse inline-block">&#10084;</span> for library lovers</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Style Django form fields
+            const formContainer = document.getElementById('django-form-container');
+            const paragraphs = formContainer.querySelectorAll('p');
+            
+            paragraphs.forEach((p, index) => {
+                // Add animation delay
+                p.style.opacity = '0';
+                p.style.transform = 'translateY(20px)';
+                p.style.transition = 'all 0.5s ease';
+                
+                setTimeout(() => {
+                    p.style.opacity = '1';
+                    p.style.transform = 'translateY(0)';
+                }, index * 100);
+
+                // Style labels
+                const label = p.querySelector('label');
+                if (label) {
+                    label.className = 'block text-sm font-semibold text-gray-700 mb-2';
+                    
+                    // Add icon based on field name
+                    const labelText = label.textContent.toLowerCase();
+                    let icon = '📝';
+                    if (labelText.includes('title')) icon = '📖';
+                    else if (labelText.includes('author')) icon = '✍️';
+                    else if (labelText.includes('isbn')) icon = '🔢';
+                    else if (labelText.includes('image') || labelText.includes('cover')) icon = '📸';
+                    else if (labelText.includes('description')) icon = '📄';
+                    else if (labelText.includes('genre') || labelText.includes('category')) icon = '🏷️';
+                    else if (labelText.includes('year') || labelText.includes('date')) icon = '📅';
+                    
+                    label.innerHTML = `<span class="mr-2">${icon}</span>${label.textContent}`;
+                }
+
+                // Style input fields
+                const input = p.querySelector('input, textarea, select');
+                if (input) {
+                    if (input.type === 'file') {
+                        input.className = 'block w-full text-sm text-gray-500 file:mr-4 file:py-3 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 file:transition-colors file:duration-200 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent';
+                    } else if (input.tagName === 'TEXTAREA') {
+                        input.className = 'block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 input-focus resize-none';
+                        input.rows = 4;
+                    } else if (input.tagName === 'SELECT') {
+                        input.className = 'block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 input-focus bg-white';
+                    } else {
+                        input.className = 'block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 input-focus';
+                    }
+                    
+                    // Add placeholder text
+                    if (input.type === 'text') {
+                        const labelText = label ? label.textContent.toLowerCase() : '';
+                        if (labelText.includes('title')) input.placeholder = 'Enter book title...';
+                        else if (labelText.includes('author')) input.placeholder = 'Enter author name...';
+                        else if (labelText.includes('isbn')) input.placeholder = 'Enter ISBN number...';
+                        else input.placeholder = 'Enter value...';
+                    }
+                }
+
+                // Style the paragraph container
+                p.className = 'relative';
+            });
+
+            // Add form submission handling
+            const form = document.querySelector('form');
+            const submitButton = form.querySelector('button[type="submit"]');
+            const loadingSpinner = document.getElementById('loading-spinner');
+            
+            form.addEventListener('submit', function(e) {
+                submitButton.disabled = true;
+                submitButton.classList.add('opacity-75', 'cursor-not-allowed');
+                loadingSpinner.classList.remove('hidden');
+                
+                // Re-enable after 5 seconds in case of issues
+                setTimeout(() => {
+                    submitButton.disabled = false;
+                    submitButton.classList.remove('opacity-75', 'cursor-not-allowed');
+                    loadingSpinner.classList.add('hidden');
+                }, 5000);
+            });
+
+            // Add input validation feedback
+            const inputs = form.querySelectorAll('input, textarea, select');
+            inputs.forEach(input => {
+                input.addEventListener('blur', function() {
+                    if (this.value.trim() === '' && this.hasAttribute('required')) {
+                        this.classList.add('border-red-500');
+                        this.classList.remove('border-gray-300');
+                    } else {
+                        this.classList.remove('border-red-500');
+                        this.classList.add('border-gray-300');
+                    }
+                });
+
+                input.addEventListener('input', function() {
+                    if (this.value.trim() !== '') {
+                        this.classList.remove('border-red-500');
+                        this.classList.add('border-gray-300');
+                    }
+                });
+            });
+
+            // Add ripple effect to buttons
+            const buttons = document.querySelectorAll('button, a[class*="bg-"]');
+            buttons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    const ripple = document.createElement('span');
+                    const rect = this.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    ripple.style.width = ripple.style.height = size + 'px';
+                    ripple.style.left = e.clientX - rect.left - size / 2 + 'px';
+                    ripple.style.top = e.clientY - rect.top - size / 2 + 'px';
+                    ripple.style.position = 'absolute';
+                    ripple.style.borderRadius = '50%';
+                    ripple.style.background = 'rgba(255, 255, 255, 0.3)';
+                    ripple.style.transform = 'scale(0)';
+                    ripple.style.animation = 'ripple 0.6s linear';
+                    ripple.style.pointerEvents = 'none';
+                    
+                    this.style.position = 'relative';
+                    this.style.overflow = 'hidden';
+                    this.appendChild(ripple);
+                    
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 600);
+                });
+            });
+        });
+
+        // Add ripple animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                to {
+                    transform: scale(2);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

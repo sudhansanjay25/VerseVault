@@ -1,0 +1,25 @@
+<h1>🔍 Search Books by Summary or Title</h1>
+
+<form method="get">
+    <input type="text" name="query" placeholder="Search by title or summary..." value="{{ query }}">
+    <button type="submit">Search</button>
+</form>
+
+{% if query %}
+    <h2>Results for "{{ query }}":</h2>
+
+    {% if results %}
+        <ul>
+        {% for book in results %}
+            <li>
+                <strong>{{ book.title }}</strong> by {{ book.author }}<br>
+                <em>{{ book.summary }}</em>
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No books found matching your query.</p>
+    {% endif %}
+{% endif %}
+
+<a href="{% url 'user_dashboard' %}">← Back to Dashboard</a>

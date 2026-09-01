@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login - Smart Library</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @keyframes fade-slide {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% {
+        box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+      }
+      50% {
+        box-shadow: 0 0 40px rgba(99, 102, 241, 0.6);
+      }
+    }
+
+    @keyframes gradient-shift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .animate-fade-slide {
+      animation: fade-slide 0.8s ease-out;
+    }
+
+    .animate-pulse-glow {
+      animation: pulse-glow 2.5s ease-in-out infinite;
+    }
+
+    .text-gradient {
+      background: linear-gradient(45deg, #06b6d4, #3b82f6, #8b5cf6);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradient-shift 5s ease infinite;
+    }
+
+    .glass {
+      backdrop-filter: blur(20px);
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .btn-primary {
+      background: linear-gradient(45deg, #6366f1, #8b5cf6);
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(45deg, #4f46e5, #7c3aed);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+    }
+
+    .hero-bg {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 25%, #312e81 50%, #1e40af 75%, #0f172a 100%);
+      background-size: 400% 400%;
+      animation: gradient-shift 8s ease infinite;
+    }
+  </style>
+</head>
+<body class="hero-bg min-h-screen flex items-center justify-center text-slate-100 px-4">
+
+  <div class="glass p-10 rounded-3xl shadow-2xl w-full max-w-md animate-fade-slide backdrop-blur-lg">
+    <h2 class="text-4xl font-extrabold text-center mb-6 text-gradient animate-pulse-glow">🔐 Smart Library Login</h2>
+
+    {% if error %}
+      <div class="bg-red-500/10 border border-red-500 text-red-400 px-4 py-3 rounded mb-4 animate-fade-slide">
+        {{ error }}
+      </div>
+    {% endif %}
+
+    <form method="POST" class="space-y-6">{% csrf_token %}
+      <div>
+        <label for="mobile" class="block font-semibold mb-1 text-slate-300">Mobile Number</label>
+        <input type="tel" name="mobile" id="mobile" required pattern="[0-9]{10}"
+          class="w-full px-4 py-3 rounded-lg bg-slate-800 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          placeholder="Enter 10-digit mobile number" />
+      </div>
+
+      <div>
+        <label for="password" class="block font-semibold mb-1 text-slate-300">Password</label>
+        <input type="password" name="password" id="password" required
+          class="w-full px-4 py-3 rounded-lg bg-slate-800 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          placeholder="Enter your password" />
+      </div>
+
+      <button type="submit"
+        class="w-full btn-primary text-white font-bold py-3 rounded-lg text-lg">
+        Login
+      </button>
+    </form>
+
+    <p class="text-center mt-6 text-sm text-slate-300">
+      Don’t have an account?
+      <a href="{% url 'register' %}" class="text-indigo-400 hover:underline font-medium">Register here</a>
+    </p>
+  </div>
+
+</body>
+</html>
